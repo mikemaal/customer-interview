@@ -69,7 +69,7 @@ func DomainsParserCsv(csvPath string, logsPath string, skipLines int) ([]Domain,
 			}
 			//return nil, err
 		}
-		if skipLines <= 0 && err == nil && len(rec) > 3 {
+		if skipLines <= 0 && err == nil && len(rec) > 2 {
 			var domain, user string
 			domain, user, err = extractDomainAndUser(rec[2])
 			if err == nil {
@@ -97,6 +97,9 @@ func DomainsParserCsv(csvPath string, logsPath string, skipLines int) ([]Domain,
 				}
 			}
 		} else {
+			if skipLines <= 0 && err == nil && len(rec) < 3 {
+				warningLogger.Println("Error reading line ", line, " with content:", rec)
+			}
 			skipLines--
 		}
 		line++
